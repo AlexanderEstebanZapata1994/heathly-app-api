@@ -71,3 +71,4 @@ C:\Users\PC\Documents\Mis cursos\React\heathly-app-api\heathly-API\heathly-API\b
 C:\Users\PC\Documents\Mis cursos\React\heathly-app-api\heathly-API\heathly-API\bin\System.Web.Cors.dll
 C:\Users\PC\Documents\Mis cursos\React\heathly-app-api\heathly-API\heathly-API\bin\System.Web.Http.Cors.dll
 C:\Users\PC\Documents\Mis cursos\React\heathly-app-api\heathly-API\heathly-API\bin\System.Web.Http.Cors.xml
+C:\Users\PC\Documents\Mis cursos\React\heathly-app-api\heathly-API\heathly-API\obj\Debug\heathly-API.csproj.CoreCompileInputs.cache

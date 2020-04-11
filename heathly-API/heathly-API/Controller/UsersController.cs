@@ -1,5 +1,7 @@
 ﻿using heathly_API.Model;
+using System;
 using System.Linq;
+using System.Text;
 using System.Web.Http;
 using System.Web.Http.Cors;
 
@@ -19,7 +21,7 @@ namespace heathly_API.Controller
                         UserId = userFound.Id,
                         UserName = userFound.username,
                         Token = userFound.token ,
-                        IsLoggedIn = false,
+                        IsLoggedIn = true,
                         Error = new ErrorType  { 
                             HasError = false,        
                             ErrorMessage = "",
@@ -32,7 +34,7 @@ namespace heathly_API.Controller
                     UserId = 0,
                     UserName = "",
                     Token = "",
-                    IsLoggedIn = true,
+                    IsLoggedIn = false,
                     Error = new ErrorType
                     {
                         HasError = true,
@@ -52,14 +54,15 @@ namespace heathly_API.Controller
 
             if (user != null)
             {
-                var _user = new Users { username = user.userName, password = user.password, token = "" };
-                var result = db.Users.Where(x => x.username == _user.username && x.password == _user.password).Select(y => new { UserFound = true }).FirstOrDefault();
+                var result = db.Users.Where(x => x.username == user.userName ).Select(y => new { UserFound = true }).FirstOrDefault();
                 if (result != null)
                 {
                     return Ok(new { Status = false, Message = "User already exists" });
                 }
                 else
                 {
+                    string _token = generateToken();
+                    var _user = new Users { username = user.userName, password = user.password, token = _token };
                     db.Users.Add(_user);
                     db.SaveChanges();
                     return Ok(new { Status = true, Message = "User created" });
@@ -67,6 +70,21 @@ namespace heathly_API.Controller
             }
             else return BadRequest();
 
+        }
+
+        public string generateToken() {
+            int longitud = 7;
+            const string alfabeto = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            StringBuilder token = new StringBuilder();
+            Random rnd = new Random();
+
+            for (int i = 0; i < longitud; i++)
+            {
+                int indice = rnd.Next(alfabeto.Length);
+                token.Append(alfabeto[indice]);
+            }
+
+            return token.ToString();
         }
     }
 }
