@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Patients">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="avatar" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="SicknessesXPatient" Relationship="Self.FK_SicknessesXPatient_PatientsId" FromRole="Patients" ToRole="SicknessesXPatient" />
+  </EntityType>
+  <EntityType Name="Sicknesses">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="code" Type="Int32" />
+    <NavigationProperty Name="SicknessesXPatient" Relationship="Self.FK_SicknessesXPatient_SicknessId" FromRole="Sicknesses" ToRole="SicknessesXPatient" />
+  </EntityType>
+  <EntityType Name="SicknessesXPatient">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="patientId" Type="Int32" Nullable="false" />
+    <Property Name="sicknessId" Type="Int32" />
+    <Property Name="active" Type="Boolean" />
+    <NavigationProperty Name="Patients" Relationship="Self.FK_SicknessesXPatient_PatientsId" FromRole="SicknessesXPatient" ToRole="Patients" />
+    <NavigationProperty Name="Sicknesses" Relationship="Self.FK_SicknessesXPatient_SicknessId" FromRole="SicknessesXPatient" ToRole="Sicknesses" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="token" Type="String" MaxLength="800" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <Association Name="FK_SicknessesXPatient_PatientsId">
+    <End Role="Patients" Type="Self.Patients" Multiplicity="1" />
+    <End Role="SicknessesXPatient" Type="Self.SicknessesXPatient" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Patients">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="SicknessesXPatient">
+        <PropertyRef Name="patientId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SicknessesXPatient_SicknessId">
+    <End Role="Sicknesses" Type="Self.Sicknesses" Multiplicity="0..1" />
+    <End Role="SicknessesXPatient" Type="Self.SicknessesXPatient" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Sicknesses">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="SicknessesXPatient">
+        <PropertyRef Name="sicknessId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Patients" EntityType="Self.Patients" />
+    <EntitySet Name="Sicknesses" EntityType="Self.Sicknesses" />
+    <EntitySet Name="SicknessesXPatient" EntityType="Self.SicknessesXPatient" />
+    <EntitySet Name="Users" EntityType="Self.Users" />
+    <AssociationSet Name="FK_SicknessesXPatient_PatientsId" Association="Self.FK_SicknessesXPatient_PatientsId">
+      <End Role="Patients" EntitySet="Patients" />
+      <End Role="SicknessesXPatient" EntitySet="SicknessesXPatient" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SicknessesXPatient_SicknessId" Association="Self.FK_SicknessesXPatient_SicknessId">
+      <End Role="Sicknesses" EntitySet="Sicknesses" />
+      <End Role="SicknessesXPatient" EntitySet="SicknessesXPatient" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

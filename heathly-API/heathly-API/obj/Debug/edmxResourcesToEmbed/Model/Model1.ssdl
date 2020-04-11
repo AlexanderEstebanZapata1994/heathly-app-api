@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Patients">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="email" Type="nvarchar" MaxLength="50" />
+    <Property Name="avatar" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="Sicknesses">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="code" Type="int" />
+  </EntityType>
+  <EntityType Name="SicknessesXPatient">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="patientId" Type="int" Nullable="false" />
+    <Property Name="sicknessId" Type="int" />
+    <Property Name="active" Type="bit" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="username" Type="varchar" MaxLength="50" />
+    <Property Name="password" Type="varchar" MaxLength="50" />
+    <Property Name="token" Type="varchar" MaxLength="800" />
+  </EntityType>
+  <Association Name="FK_SicknessesXPatient_PatientsId">
+    <End Role="Patients" Type="Self.Patients" Multiplicity="1" />
+    <End Role="SicknessesXPatient" Type="Self.SicknessesXPatient" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Patients">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="SicknessesXPatient">
+        <PropertyRef Name="patientId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SicknessesXPatient_SicknessId">
+    <End Role="Sicknesses" Type="Self.Sicknesses" Multiplicity="0..1" />
+    <End Role="SicknessesXPatient" Type="Self.SicknessesXPatient" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Sicknesses">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="SicknessesXPatient">
+        <PropertyRef Name="sicknessId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ModelStoreContainer">
+    <EntitySet Name="Patients" EntityType="Self.Patients" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Sicknesses" EntityType="Self.Sicknesses" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SicknessesXPatient" EntityType="Self.SicknessesXPatient" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_SicknessesXPatient_PatientsId" Association="Self.FK_SicknessesXPatient_PatientsId">
+      <End Role="Patients" EntitySet="Patients" />
+      <End Role="SicknessesXPatient" EntitySet="SicknessesXPatient" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SicknessesXPatient_SicknessId" Association="Self.FK_SicknessesXPatient_SicknessId">
+      <End Role="Sicknesses" EntitySet="Sicknesses" />
+      <End Role="SicknessesXPatient" EntitySet="SicknessesXPatient" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

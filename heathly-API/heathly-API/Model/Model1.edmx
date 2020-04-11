@@ -1,0 +1,231 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Patients">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="email" Type="nvarchar" MaxLength="50" />
+          <Property Name="avatar" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Sicknesses">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="code" Type="int" />
+        </EntityType>
+        <EntityType Name="SicknessesXPatient">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="patientId" Type="int" Nullable="false" />
+          <Property Name="sicknessId" Type="int" />
+          <Property Name="active" Type="bit" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="username" Type="varchar" MaxLength="50" />
+          <Property Name="password" Type="varchar" MaxLength="50" />
+          <Property Name="token" Type="varchar" MaxLength="800" />
+        </EntityType>
+        <Association Name="FK_SicknessesXPatient_PatientsId">
+          <End Role="Patients" Type="Self.Patients" Multiplicity="1" />
+          <End Role="SicknessesXPatient" Type="Self.SicknessesXPatient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patients">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="SicknessesXPatient">
+              <PropertyRef Name="patientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SicknessesXPatient_SicknessId">
+          <End Role="Sicknesses" Type="Self.Sicknesses" Multiplicity="0..1" />
+          <End Role="SicknessesXPatient" Type="Self.SicknessesXPatient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sicknesses">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="SicknessesXPatient">
+              <PropertyRef Name="sicknessId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ModelStoreContainer">
+          <EntitySet Name="Patients" EntityType="Self.Patients" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sicknesses" EntityType="Self.Sicknesses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SicknessesXPatient" EntityType="Self.SicknessesXPatient" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_SicknessesXPatient_PatientsId" Association="Self.FK_SicknessesXPatient_PatientsId">
+            <End Role="Patients" EntitySet="Patients" />
+            <End Role="SicknessesXPatient" EntitySet="SicknessesXPatient" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SicknessesXPatient_SicknessId" Association="Self.FK_SicknessesXPatient_SicknessId">
+            <End Role="Sicknesses" EntitySet="Sicknesses" />
+            <End Role="SicknessesXPatient" EntitySet="SicknessesXPatient" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Patients">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="avatar" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="SicknessesXPatient" Relationship="Self.FK_SicknessesXPatient_PatientsId" FromRole="Patients" ToRole="SicknessesXPatient" />
+        </EntityType>
+        <EntityType Name="Sicknesses">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="code" Type="Int32" />
+          <NavigationProperty Name="SicknessesXPatient" Relationship="Self.FK_SicknessesXPatient_SicknessId" FromRole="Sicknesses" ToRole="SicknessesXPatient" />
+        </EntityType>
+        <EntityType Name="SicknessesXPatient">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="patientId" Type="Int32" Nullable="false" />
+          <Property Name="sicknessId" Type="Int32" />
+          <Property Name="active" Type="Boolean" />
+          <NavigationProperty Name="Patients" Relationship="Self.FK_SicknessesXPatient_PatientsId" FromRole="SicknessesXPatient" ToRole="Patients" />
+          <NavigationProperty Name="Sicknesses" Relationship="Self.FK_SicknessesXPatient_SicknessId" FromRole="SicknessesXPatient" ToRole="Sicknesses" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="token" Type="String" MaxLength="800" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FK_SicknessesXPatient_PatientsId">
+          <End Role="Patients" Type="Self.Patients" Multiplicity="1" />
+          <End Role="SicknessesXPatient" Type="Self.SicknessesXPatient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patients">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="SicknessesXPatient">
+              <PropertyRef Name="patientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SicknessesXPatient_SicknessId">
+          <End Role="Sicknesses" Type="Self.Sicknesses" Multiplicity="0..1" />
+          <End Role="SicknessesXPatient" Type="Self.SicknessesXPatient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sicknesses">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="SicknessesXPatient">
+              <PropertyRef Name="sicknessId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Patients" EntityType="Self.Patients" />
+          <EntitySet Name="Sicknesses" EntityType="Self.Sicknesses" />
+          <EntitySet Name="SicknessesXPatient" EntityType="Self.SicknessesXPatient" />
+          <EntitySet Name="Users" EntityType="Self.Users" />
+          <AssociationSet Name="FK_SicknessesXPatient_PatientsId" Association="Self.FK_SicknessesXPatient_PatientsId">
+            <End Role="Patients" EntitySet="Patients" />
+            <End Role="SicknessesXPatient" EntitySet="SicknessesXPatient" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SicknessesXPatient_SicknessId" Association="Self.FK_SicknessesXPatient_SicknessId">
+            <End Role="Sicknesses" EntitySet="Sicknesses" />
+            <End Role="SicknessesXPatient" EntitySet="SicknessesXPatient" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="Patients">
+            <EntityTypeMapping TypeName="Model.Patients">
+              <MappingFragment StoreEntitySet="Patients">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="avatar" ColumnName="avatar" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sicknesses">
+            <EntityTypeMapping TypeName="Model.Sicknesses">
+              <MappingFragment StoreEntitySet="Sicknesses">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="code" ColumnName="code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SicknessesXPatient">
+            <EntityTypeMapping TypeName="Model.SicknessesXPatient">
+              <MappingFragment StoreEntitySet="SicknessesXPatient">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="patientId" ColumnName="patientId" />
+                <ScalarProperty Name="sicknessId" ColumnName="sicknessId" />
+                <ScalarProperty Name="active" ColumnName="active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="Model.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="token" ColumnName="token" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
